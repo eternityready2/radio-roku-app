@@ -1,0 +1,39 @@
+<?xml version = "1.0" encoding = "utf-8" ?>
+
+<!--********** Copyright 2016 Roku Corp.  All Rights Reserved. **********-->
+
+<component name = "ContentReader" extends = "Task" >
+
+  <interface>
+    <field id = "contenturi" type = "uri" />
+    <field id = "fetchcontent" type = "assocarray" />
+  </interface>
+
+  <script type = "text/brightscript" >
+
+    <![CDATA[
+
+    sub init()
+      m.top.functionName = "getcontent"
+     
+    end sub
+
+    sub getcontent()
+      httpRequest = createObject("roUrlTransfer")
+      httpRequest.SetCertificatesFile("common:/certs/ca-bundle.crt")
+      httpRequest.AddHeader("Content-Type","application/json")
+      httpRequest.setUrl(m.top.contenturi)
+      contentstring=httpRequest.GetToString()
+      response = ParseJson(contentstring)
+      'print response.previous
+      'print response.current
+      'print response.next
+      'print response
+      m.top.fetchcontent = response
+    end sub
+
+    ]]>
+
+  </script>
+
+</component>

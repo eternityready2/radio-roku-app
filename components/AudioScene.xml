@@ -1,0 +1,178 @@
+<?xml version = "1.0" encoding = "utf-8" ?> 
+
+<!--********** Copyright 2016 Roku Corp.  All Rights Reserved. **********-->
+
+<component name = "AudioScene" extends = "Scene" >
+
+  <script type = "text/brightscript" >
+	
+    <![CDATA[
+    sub init()
+      m.display =createObject("roDeviceInfo")
+      screensize=m.display.GetDisplaySize()
+      print screensize
+      screenheight=screensize.h
+      screenwidth=screensize.w
+      print screenwidth
+      print screenheight
+      m.top.backgroundURI = "pkg:/images/background.png"
+      
+      m.poster = m.top.FindNode("Poster")
+      m.poster.width=300
+      m.poster.height=300
+      headerheight = 50
+      if screenheight = 720
+      	m.poster.width=200
+      	m.poster.height=200
+      	headerheight = 300
+      end if
+      print m.poster.boundingRect()
+      postrect = m.poster.boundingRect()
+      
+      posterposx = (1280 - postrect.width)
+      posterposy = (720 - postrect.height)- headerheight
+      m.poster.translation = [ 200, posterposy ]
+      
+	  'playbtn = m.top.findNode("playbtn")
+      'btnrect = playbtn.boundingRect()
+      'centerx = (1280 - btnrect.width) / 2
+      'centery = (720 - btnrect.height) / 2
+      'playbtn.translation = [ centerx, centery ]
+      
+      np = m.top.findNode("nowPlaying")
+      
+      
+      
+      m.text1 = m.top.FindNode("text1")
+      print m.text1.boundingRect()
+      text1rect = m.text1.boundingRect()
+      text1posx = (1280 - text1rect.width)
+      text1posy = ((posterposy+ postrect.height +100) - text1rect.height)
+      m.text1.translation = [ 200, text1posy]
+      
+      m.text2 = m.top.FindNode("text2")
+      print m.text2.boundingRect()
+      text2rect = m.text2.boundingRect()
+      text2posx = (1280 - text2rect.width)
+      text2posy = text1posy+50 '(720 - text2rect.height)
+      m.text2.translation = [ 200, text2posy]
+      
+      m.text3 = m.top.FindNode("text3")
+      print m.text3.boundingRect()
+      text3rect = m.text3.boundingRect()
+      text3posx = (1280 - text3rect.width)
+      text3posy = text2posy+50 '(720 - text3rect.height)
+      m.text3.translation = [ 200, text3posy]
+      
+      m.text4 = m.top.FindNode("text4")
+      print m.text4.boundingRect()
+      text4rect = m.text4.boundingRect()
+      text4posx = (1280 - text4rect.width)
+      text4posy = text3posy+50 '(720 - text4rect.height)
+      m.text4.translation = [ 200, text4posy ]
+      
+      m.text5 = m.top.FindNode("text5")
+      print m.text5.boundingRect()
+      text5rect = m.text5.boundingRect()
+      text5posx = (1280 - text5rect.width)
+      text5posy = text4posy+50 '(720 - text5rect.height)
+      m.text5.translation = [ 200, text5posy ]
+      print text5posy
+      
+      
+      m.np = m.top.FindNode("nowPlaying")
+      m.fetchTask = CreateObject("roSGNode", "FetchTask")
+	  m.fetchTask.ObserveField("content", "onIndexChanged")
+	  m.fetchTask.control = "RUN"
+      
+      audio = createObject("roSGNode", "Audio")
+      audiocontent = createObject("RoSGNode", "ContentNode")
+      audiocontent.url = "http://eternityreadyradio.out.airtime.pro:8000/eternityreadyradio_b"
+      audio.content = audiocontent
+      m.top.appendChild(audio)
+      audio.control = "play"
+      m.top.setFocus(true)
+      
+      
+    end sub
+    
+    sub onIndexChanged() as void
+    	str = m.fetchTask.content
+    	m.np.text = str
+	end sub
+    
+    
+    
+  
+    ]]>
+
+  </script>
+  
+  <children>
+
+<Poster id = "Poster"
+
+uri="pkg:/images/default.png"
+  width="300.0"
+  height="300.0"
+   />
+   
+  <Label
+  id="nowPlaying"
+  height="0"
+  width="700"
+  wrap="true"
+  font="font:MediumBoldSystemFont"
+  text = "Now Playing"
+  horizAlign = "left"
+  vertAlign = "bottom"
+  translation="[450,250]" /> 
+
+<!--  
+ <Button
+      id = "playbtn"
+      text = "Play"
+      minWidth = "240"/>
+      --> 
+
+   <Label
+  id="text1"
+  height="44"
+  width="0"
+  font="font:MediumBoldSystemFont"
+  text = "Eternity Ready Radio is your alternative christian station."
+  />
+   <Label
+  id="text2"
+  height="44"
+  width="0"
+  font="font:MediumBoldSystemFont"
+  text = "Positive and Family Friendly. In 20 plus countries."
+   />
+   <Label
+  id="text3"
+  height="44"
+  width="0"
+  font="font:MediumBoldSystemFont"
+  text = "Web Site @ eternityreadyradio.com "
+   />
+
+    <Label
+  id="text4"
+  height="44"
+  width="0"
+  font="font:MediumBoldSystemFont"
+  text = "Watch TV @ eternityready.tv"
+  />
+    <Label
+  id="text5"
+  height="44"
+  width="0"
+  font="font:MediumBoldSystemFont"
+  text = "Facbook @ eternityready. Donate @ paypal.me/eternityready"
+   />
+  
+
+</children>
+
+</component>

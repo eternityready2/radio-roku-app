@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+
+<component name="FetchTask" extends="Task">
+
+<interface>
+    <field id = "content" type = "string" />
+</interface>
+
+<script type="text/brightscript" >
+<![CDATA[
+
+sub init()
+	m.top.functionName = "executeTask"
+	m.readRadioEventsTask = createObject("roSGNode", "ContentReader")
+end sub
+
+function executeTask() as void
+	timer=createobject("roTimeSpan")
+    maxExecutionTime=10000
+    next_call = timer.TotalMilliseconds() + maxExecutionTime
+	while(true)
+      getNowPlaying()
+      sleep(10000)
+     end while
+end function
+
+function executeTask3() as void
+	timer=createobject("roTimeSpan")
+    maxExecutionTime=10000
+    next_call = timer.TotalMilliseconds() + maxExecutionTime
+	while(true)
+       if timer.TotalMilliseconds() > next_call then
+            getNowPlaying()
+            next_call = timer.TotalMilliseconds() + maxExecutionTime
+       end if
+     end while
+end function
+
+sub getNowPlaying()
+      print "Fetching...."
+      
+      m.readRadioEventsTask.contenturi = "https://eternityreadyradio.airtime.pro/api/live-info"
+      m.readRadioEventsTask.ObserveField("fetchcontent", "showNodeInfo")
+      m.readRadioEventsTask.fetchcontent= m.top.fetchcontent
+      m.readRadioEventsTask.control = "RUN"
+      'print m.readRadioEventsTask
+end sub
+
+sub showNodeInfo()
+   'm.top.content = m.readRadioEventsTask.fetchcontent.current.name
+   if m.readRadioEventsTask.fetchcontent <> invalid
+   		print "Valid"
+    	m.top.content = m.readRadioEventsTask.fetchcontent.current.name
+   end if
+end sub
+	
+    
+]]>
+</script>
+
+</component>
